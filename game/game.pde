@@ -1,17 +1,26 @@
+import java.util.ArrayList;
+
 int[][] grid = new int[80][45];
 final int tileSize = 16;
-Player player = new Player(4, 4);
+Player player;
+ArrayList<Enemy> enemies = new ArrayList<Enemy>();
 
 void setup() {
     size(1280, 720);
+
+    player = new Player(4, 4);
+
+    enemies.add(new Enemy(30, 40, player));
+    enemies.add(new Enemy(10, 30, player));
+    enemies.add(new Enemy(60, 20, player));
+
     clearBoard();
-    drawBoard();
 }
 
 void draw() {    
     clearBoard();
     updateEntities();
-    
+
     drawBoard();
 
     /*
@@ -65,7 +74,23 @@ void keyReleased() {
 void updateEntities()
 {
     grid[player.x][player.y] = player.type;
+    for (int i = 0; i < enemies.size(); i++) {
+        grid[enemies.get(i).x][enemies.get(i).y] = enemies.get(i).type;
+    }
     player.update();
+    resolveCollisions();
+    println(player.health, player.invincibleTimer, player.alpha);
+}
+
+void resolveCollisions() {
+    for (int i = 0; i < enemies.size(); i++) {
+        if (player.collidesWith(enemies.get(i))) {
+            if (!player.isInvincible()) {
+                player.health--;
+                player.becomeInvincible();
+            }
+        }
+    }
 }
 
 void clearBoard() {
@@ -92,20 +117,20 @@ color getColorFromType(int type)
 
     switch(type)
     {
-    case 0: 
+    case 0: // Nothing
         c = color(127);
         break;
     case 1: 
-        c = color(255, 0, 0);
-        break;
-    case 2: 
+        // Food
         c = color(0, 255, 0);
         break;
-    case 3: 
-        c = color(0, 0, 255);
+    case 2: 
+        // Enemy
+        c = color(255, 0, 0);
         break;
-    case 4: 
-        c = color(0, 255, 255);
+    case 3: 
+        // Player
+        c = player.c;
         break;
     }    
 
