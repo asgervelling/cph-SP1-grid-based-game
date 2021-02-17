@@ -38,13 +38,17 @@ class Player extends Actor {
         }
     
         // Make invincible for a short timer after collision with enemy
-        invincibleTimer--;
-        blinkingTimer--;
+        runTimers();
         if (this.isInvincible()) {
             this.displayInvincibility();
         } else {
             this.alpha = 255;
         }
+    }
+    
+    void runTimers() {
+        invincibleTimer--;
+        blinkingTimer--;
     }
 
     boolean collidesWith(Actor a) {

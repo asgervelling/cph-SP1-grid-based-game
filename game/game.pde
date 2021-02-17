@@ -78,8 +78,15 @@ void updateEntities()
         grid[enemies.get(i).x][enemies.get(i).y] = enemies.get(i).type;
     }
     player.update();
+    updateEnemies();
     resolveCollisions();
-    println(player.health, player.invincibleTimer, player.alpha);
+    // println(player.health, player.invincibleTimer, player.alpha);
+}
+
+void updateEnemies() {
+    for (int i = 0; i < enemies.size(); i++) {
+        enemies.get(i).update();
+    }
 }
 
 void resolveCollisions() {
