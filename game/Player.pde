@@ -20,8 +20,13 @@ class Player extends Actor {
         } else if (arrowKeysPressed[ARROWRIGHT]) {
             super.move(1, 0);
         }
+        
+        if (arrowKeysPressed[ARROWUP]) {
+            super.move(0, -1);
+        } else if (arrowKeysPressed[ARROWDOWN]) {
+            super.move(0, 1);
+        }
+        
+        println(x, y);
     }
-    
-    @Override
-    void display() {}
 }

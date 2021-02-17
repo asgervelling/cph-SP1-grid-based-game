@@ -1,5 +1,5 @@
-int[][] grid = new int[80][80];
-final int tileSize = 1280 / grid.length;
+int[][] grid = new int[80][45];
+final int tileSize = 16;
 Player player = new Player(4, 4);
 
 void setup() {
@@ -8,10 +8,11 @@ void setup() {
     drawBoard();
 }
 
-void draw() {
+void draw() {    
     clearBoard();
+    updateEntities();
+    
     drawBoard();
-    printBoard();
 
     /*
      clearBoard() // sætter alle værdier til 0 via double for loop (grid[x][y] = 0;)
@@ -104,7 +105,7 @@ color getColorFromType(int type)
         c = color(0, 0, 255);
         break;
     case 4: 
-        c = color (0, 255, 255);
+        c = color(0, 255, 255);
         break;
     }    
 
