@@ -6,10 +6,12 @@ class Player extends Actor {
     int blinkingTimer = 0;
 
     boolean[] arrowKeysPressed = {false, false, false, false};
-    final int type = 3;
+    final int arrayRepresentation = 3;
 
-    int alpha = 255;
-    color c = color(0, 0, 255, this.alpha);
+    color primaryColor = color(0, 0, 255);
+    color secondaryColor = color(255);
+
+    color c = primaryColor;
 
     final int ARROWLEFT = 0;
     final int ARROWRIGHT = 1;
@@ -22,8 +24,7 @@ class Player extends Actor {
 
     @Override
     void update() {
-        println(getCurrentQuadrant());
-        c = color(0, 0, 255, this.alpha);
+        c = color(0, 0, 255);
         
         // Movement
         if (arrowKeysPressed[ARROWLEFT]) {
@@ -43,11 +44,17 @@ class Player extends Actor {
         if (this.isInvincible()) {
             this.displayInvincibility();
         } else {
-            this.alpha = 255;
+            this.c = primaryColor;
         }
     }
     
+    @Override
+    void resolveEdgeCollision() {
+        return;
+    }
+    
     void runTimers() {
+        /* Timers always decrement. Do something if their value >= 0 */
         invincibleTimer--;
         blinkingTimer--;
     }
@@ -68,13 +75,11 @@ class Player extends Actor {
     }
 
     void becomeInvincible() {
-        invincibleTimer = 100;
-        // Spawn on the other side of the map
-        
+        /* Player is invincible and moved away from enemies when health is lost */
+        invincibleTimer = 100;        
         int newX, newY;
         
         String currentQuadrant = getCurrentQuadrant();
-        println("Caught at " + currentQuadrant);
         switch (currentQuadrant) {
             case "lowerRight":
                 // Spawn in the upper left side
@@ -100,18 +105,18 @@ class Player extends Actor {
         }
         this.x = newX;
         this.y = newY;        
-        
     }
 
     void displayInvincibility() {
+        /* Classic blink to indicate invincibility */
         int blinkDuration = 40;
         if (blinkingTimer < 0) {
             blinkingTimer = 40;
         }
         if (blinkingTimer > blinkDuration / 2) {
-            alpha = 0;
+            this.c = secondaryColor;
         } else {
-            alpha = 255;
+            this.c = primaryColor;
         }
     }
     
@@ -131,7 +136,6 @@ class Player extends Actor {
         } else {
             yString = "lower";
         }
-        
         
         quadrant = yString + xString;       
         return quadrant;

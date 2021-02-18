@@ -13,9 +13,12 @@ abstract class Actor {
             xDir == 1 && this.x + 1 > grid.length - 1 ||
             yDir == -1 && this.y - 1 < 0 ||
             yDir == 1 && this.y + 1 > grid[0].length - 1) {
+                resolveEdgeCollision();
                 return;
         }
         this.x += 1 * xDir;
         this.y += 1 * yDir;
     }
+    
+    abstract void resolveEdgeCollision();
 }

@@ -1,5 +1,5 @@
 class Enemy extends Actor {
-    final int type = 2;
+    final int arrayRepresentation = 2;
     Player player;
     int moveTimer = 0;
     
@@ -49,5 +49,10 @@ class Enemy extends Actor {
                 }
             }
         }
+    }
+    
+    @Override
+    void resolveEdgeCollision() {
+        return;
     }
 }

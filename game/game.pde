@@ -4,6 +4,7 @@ int[][] grid = new int[80][45];
 final int tileSize = 16;
 Player player;
 ArrayList<Enemy> enemies = new ArrayList<Enemy>();
+ArrayList<Food> foods = new ArrayList<Food>();
 
 void setup() {
     size(1280, 720);
@@ -13,6 +14,17 @@ void setup() {
     enemies.add(new Enemy(30, 40, player));
     enemies.add(new Enemy(10, 30, player));
     enemies.add(new Enemy(60, 20, player));
+    
+    foods.add(new Food(25, 25, player));
+    foods.add(new Food(35, 25, player));
+    foods.add(new Food(53, 40, player));
+    
+    GraphicalUserInterface GUI = new GraphicalUserInterface();
+    Button testButton = new Button(4, 4, 2, 1, GUI);
+    Container testContainer = new Container(4, 4, 4, 4, "testContainer", GUI);
+    
+    println(GUI.elements.get(0).x);
+    
 
     clearBoard();
 }
@@ -73,28 +85,47 @@ void keyReleased() {
 
 void updateEntities()
 {
-    grid[player.x][player.y] = player.type;
+    // Update the grid array
+    grid[player.x][player.y] = player.arrayRepresentation;
     for (int i = 0; i < enemies.size(); i++) {
-        grid[enemies.get(i).x][enemies.get(i).y] = enemies.get(i).type;
+        grid[enemies.get(i).x][enemies.get(i).y] = enemies.get(i).arrayRepresentation;
     }
+    for (int i = 0; i < foods.size(); i++) {
+        grid[foods.get(i).x][foods.get(i).y] = foods.get(i).arrayRepresentation;
+    }
+    
+    // Call update on everyone
     player.update();
-    updateEnemies();
-    resolveCollisions();
-    // println(player.health, player.invincibleTimer, player.alpha);
-}
-
-void updateEnemies() {
+    
     for (int i = 0; i < enemies.size(); i++) {
         enemies.get(i).update();
     }
+    
+    for (int i = 0; i < foods.size(); i++) {
+        foods.get(i).update();
+    }
+    
+    resolveCollisions();
 }
 
+
+
+
 void resolveCollisions() {
+    // Collision with enemies
     for (int i = 0; i < enemies.size(); i++) {
         if (player.collidesWith(enemies.get(i))) {
             if (!player.isInvincible()) {
                 player.health--;
                 player.becomeInvincible();
+            }
+        }
+    }
+    // Collision with food
+    for (int i = 0; i < foods.size(); i++) {
+        if (player.collidesWith(foods.get(i))) {
+            if (!player.isInvincible()) {
+                foods.remove(i);
             }
         }
     }
@@ -111,18 +142,18 @@ void clearBoard() {
 void drawBoard() {
     for (int x = 0; x < grid.length; x++) {
         for (int y = 0; y < grid[0].length; y++) {
-            color c = getColorFromType(grid[x][y]);
+            color c = getColorFromInt(grid[x][y]);
             fill(c);
             rect(x * tileSize, y * tileSize, tileSize, tileSize);
         }
     }
 }
 
-color getColorFromType(int type) 
+color getColorFromInt(int repr) 
 {
     color c = color(255);
 
-    switch(type)
+    switch(repr)
     {
     case 0: // Nothing
         c = color(127);
