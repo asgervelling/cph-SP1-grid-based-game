@@ -24,9 +24,7 @@ class Enemy extends Actor {
         int yDistance = Math.abs(player.y - this.y);
     
         // random chance (~25% chance) for at enemy flytter sig i en tilfældig retning. 
-        float randomMoveProbability = random(0f, 1f);
-        println(randomMoveProbability);
-    
+        float randomMoveProbability = random(0f, 1f);    
         if (randomMoveProbability < 0.25) {
             int randomMoveX = (int)Math.round(random(-1, 1));
             int randomMoveY = (int)Math.round(random(-1, 1));

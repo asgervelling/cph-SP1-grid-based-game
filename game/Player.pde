@@ -22,6 +22,7 @@ class Player extends Actor {
 
     @Override
     void update() {
+        println(getCurrentQuadrant());
         c = color(0, 0, 255, this.alpha);
         
         // Movement
@@ -68,6 +69,38 @@ class Player extends Actor {
 
     void becomeInvincible() {
         invincibleTimer = 100;
+        // Spawn on the other side of the map
+        
+        int newX, newY;
+        
+        String currentQuadrant = getCurrentQuadrant();
+        println("Caught at " + currentQuadrant);
+        switch (currentQuadrant) {
+            case "lowerRight":
+                // Spawn in the upper left side
+                newX = 5;
+                newY = 5;
+                break;
+            case "lowerLeft":
+                newX = grid.length - 5;
+                newY = 5;
+                break;
+            case "upperRight":
+                newX = 5;
+                newY = grid[0].length - 5;
+                break;
+            case "upperLeft":
+                newX = grid.length - 5;
+                newY = grid[0].length - 5;
+                break;
+            default:
+                println("This shouldn't happen");
+                newX = 40;
+                newY = 20;
+        }
+        this.x = newX;
+        this.y = newY;        
+        
     }
 
     void displayInvincibility() {
@@ -80,5 +113,27 @@ class Player extends Actor {
         } else {
             alpha = 255;
         }
+    }
+    
+    String getCurrentQuadrant() {
+        /* Find out which quarter of the map, the player is standing within */
+        String xString, yString;
+        String quadrant;
+        
+        if (this.x < grid.length / 2) {
+            xString = "Left";
+        } else {
+            xString = "Right";
+        }
+        
+        if (this.y < grid[0].length / 2) {
+            yString = "upper";
+        } else {
+            yString = "lower";
+        }
+        
+        
+        quadrant = yString + xString;       
+        return quadrant;
     }
 }
