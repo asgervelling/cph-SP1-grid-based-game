@@ -1,5 +1,6 @@
 void newGame(int numEnemies, int numFoods) {
     player = new Player(4, 4);
+    transition = new TransitionOverlay();
 
     for (int i = 0; i < numEnemies; i++)
     {
@@ -15,12 +16,11 @@ void newGame(int numEnemies, int numFoods) {
     }
 }
 
-GraphicalUserInterface initGUI() {
+GraphicalUserInterface initMainMenuGUI() {
     GraphicalUserInterface GUI = new GraphicalUserInterface();
     Container testContainer = new Container(100, 100, 1080, 520, "testContainer", GUI);
     Button playButton = new Button(410, 130, "Play", testContainer, GUI);
-    Button highscoresButton = new Button(0, 0, "Highscores", testContainer, GUI);
-    highscoresButton.placeBelow(playButton);
+    Button highscoresButton = new Button(410, placedBelow(playButton), "Highscores", testContainer, GUI);
     
     return GUI;
 }

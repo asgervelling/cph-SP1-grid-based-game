@@ -7,18 +7,21 @@ final int tileSize = 16;
 Player player;
 ArrayList<Enemy> enemies = new ArrayList<Enemy>();
 ArrayList<Food> foods = new ArrayList<Food>();
+TransitionOverlay transition;
 
 GraphicalUserInterface GUI;
 
 void setup() {
     size(1280, 720);
-    GUI = initGUI();
+    GUI = initMainMenuGUI();
     newGame(3, 3);
+    
 }
 
 void draw() {    
     switch (scene) {
         case "mainMenu":
+            drawBoard();
             GUI.update();
             GUI.display();
             break;
@@ -26,8 +29,6 @@ void draw() {
             clearBoard();
             update();
             drawBoard();
-        case "transition":
-            break;
     }
 }
 
@@ -94,17 +95,20 @@ void update()
     }
 
     // Update entities
-    player.update();
-
-    for (int i = 0; i < enemies.size(); i++) {
-        enemies.get(i).update();
+    transition.update();
+    transition.display();
+    if (transition.timeLeft < 0) {
+        player.update();
+        for (int i = 0; i < enemies.size(); i++) {
+            enemies.get(i).update();
+        }
+    
+        for (int i = 0; i < foods.size(); i++) {
+            foods.get(i).update();
+        }
+    
+        resolveCollisions();
     }
-
-    for (int i = 0; i < foods.size(); i++) {
-        foods.get(i).update();
-    }
-
-    resolveCollisions();
 }
 
 boolean gameIsOver() {
