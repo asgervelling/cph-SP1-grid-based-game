@@ -26,6 +26,28 @@ int randIntExceptX(int min, int max, int x) {
     return randInt;
 }
 
+float translateToRange(float val, float[] rangeIn, float[] rangeOut) {
+    /* Return val translated from rangeIn to rangeOut */
+    float spanIn = rangeIn[1] - rangeIn[0];
+    float spanOut = rangeOut[1] - rangeOut[0];
+    float scaledVal = (val - rangeIn[0]) / spanIn;
+    
+    return rangeOut[0] + (scaledVal * spanOut);
+}
+
+/*
+def translate(value, leftMin, leftMax, rightMin, rightMax):
+    # Figure out how 'wide' each range is
+    leftSpan = leftMax - leftMin
+    rightSpan = rightMax - rightMin
+
+    # Convert the left range into a 0-1 range (float)
+    valueScaled = float(value - leftMin) / float(leftSpan)
+
+    # Convert the 0-1 range into a value in the right range.
+    return rightMin + (valueScaled * rightSpan)
+*/
+
 Enemy enemyAtRandomSpot() {
     int randX = randInt(grid.length - 1);
     int randY = randInt(grid[0].length - 1);

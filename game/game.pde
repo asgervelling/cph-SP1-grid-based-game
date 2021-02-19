@@ -8,13 +8,12 @@ Player player;
 ArrayList<Enemy> enemies = new ArrayList<Enemy>();
 ArrayList<Food> foods = new ArrayList<Food>();
 CountdownTransition countdownTransition;
-
 GraphicalUserInterface GUI;
 
 void setup() {
     size(1280, 720);
     GUI = initMainMenuGUI();
-    newGame(3, 3);    
+    newGame(3, 1);
 }
 
 void draw() {    
@@ -28,6 +27,7 @@ void draw() {
             clearBoard();
             update();
             drawBoard();
+            drawParticles();
             if (countdownTransition.timeLeft > 0) {
                 countdownTransition.display();
             }
@@ -83,11 +83,11 @@ void mouseReleased() {
 void update()
 {
     if (gameIsOver()) {
-        println("Game over");
-        exit();
+        //println("Game over");
+        //exit();
     }
     if (gameWon()) {
-        enableSlowMotion();
+        explodeEnemies();
     }
 
     // Update the grid array
@@ -112,7 +112,7 @@ void update()
         }
     
         resolveCollisions();
-    }
+    }    
 }
 
 boolean gameIsOver() {
@@ -145,6 +145,7 @@ void resolveCollisions() {
 
 void clearBoard() {
     strokeWeight(1);
+    stroke(0);
     for (int x = 0; x < grid.length; x++) {
         for (int y = 0; y < grid[0].length; y++) {
             grid[x][y] = 0;
@@ -154,6 +155,7 @@ void clearBoard() {
 
 void drawBoard() {
     strokeWeight(1);
+    stroke(0);
     for (int x = 0; x < grid.length; x++) {
         for (int y = 0; y < grid[0].length; y++) {
             color c = getColorFromInt(grid[x][y]);
@@ -163,14 +165,21 @@ void drawBoard() {
     }
 }
 
+void drawParticles() {
+    for (int i = 0; i < enemies.size(); i++) {
+        enemies.get(i).explosion.display();
+    }
+}
+
 color getColorFromInt(int repr) 
 {
     color c = color(255);
+    color bgColor = color(127);
 
     switch(repr)
     {
     case 0: // Nothing
-        c = color(127);
+        c = bgColor;
         break;
     case 1: 
         // Food
@@ -178,8 +187,13 @@ color getColorFromInt(int repr)
         break;
     case 2: 
         // Enemy
-        c = color(255, 0, 0);
-        break;
+        if (!gameWon()) {
+            c = enemies.get(0).c;
+            break;
+        } else {
+            c = bgColor;
+            break;
+        }
     case 3: 
         // Player
         c = player.c;
@@ -199,8 +213,9 @@ void printBoard() {
     print("\n");
 }
 
-void enableSlowMotion() {
+void explodeEnemies() {
+    for (int i = 0; i < enemies.size(); i++) {
+        enemies.get(i).explode();
+    }
     
 }
-
-void disableSlowMotion () {}
