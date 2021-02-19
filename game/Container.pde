@@ -8,12 +8,14 @@ class Container extends GUIElement {
     
     @Override
     void update() {
-        fill(super.bgColor);
-        stroke(super.strokeColor);
-        strokeWeight(5);
-        rect(super.x, super.y, super.w, super.h);
+        
     }
     
     @Override
-    void display() {}
+    void display() {
+        fill(super.bgColor);
+        stroke(super.strokeColor);
+        strokeWeight(5);
+        rect(super.x, super.y, super.w, super.h, 50, 0, 50, 0);
+    }
 }

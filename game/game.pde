@@ -1,48 +1,34 @@
 import java.util.ArrayList;
 
+String scene = "mainMenu";
 int[][] grid = new int[80][45];
 final int tileSize = 16;
+
 Player player;
 ArrayList<Enemy> enemies = new ArrayList<Enemy>();
 ArrayList<Food> foods = new ArrayList<Food>();
 
+GraphicalUserInterface GUI;
+
 void setup() {
     size(1280, 720);
-
-    player = new Player(4, 4);
-
-    enemies.add(new Enemy(30, 40, player));
-    enemies.add(new Enemy(10, 30, player));
-    enemies.add(new Enemy(60, 20, player));
-    
-    foods.add(new Food(25, 25, player));
-    foods.add(new Food(35, 25, player));
-    foods.add(new Food(53, 40, player));
-    
-    GraphicalUserInterface GUI = new GraphicalUserInterface();
-    Button testButton = new Button(4, 4, 2, 1, GUI);
-    Container testContainer = new Container(4, 4, 4, 4, "testContainer", GUI);
-    
-    println(GUI.elements.get(0).x);
-    
-
-    clearBoard();
+    GUI = initGUI();
+    newGame(3, 3);
 }
 
 void draw() {    
-    clearBoard();
-    updateEntities();
-
-    drawBoard();
-
-    /*
-     clearBoard() // sætter alle værdier til 0 via double for loop (grid[x][y] = 0;)
-     updateEnemies() // kalder enemy.moveTowardsPlayer() på hver enemy.
-     drawBoard() // tegner rect og bruger getColorFromType metoden til at bestemme fill værdi.
-     
-     isGameOver() // returnerer true hvis spillerens health er under -1.
-     resolveCollisions() // tjekker om enemy og player står på samme x og y koordinat. Hvis ja, så kald player.takeDamage();
-     */
+    switch (scene) {
+        case "mainMenu":
+            GUI.update();
+            GUI.display();
+            break;
+        case "game":
+            clearBoard();
+            update();
+            drawBoard();
+        case "transition":
+            break;
+    }
 }
 
 void keyPressed() {
@@ -83,8 +69,21 @@ void keyReleased() {
     }
 }
 
-void updateEntities()
+void mousePressed() {
+    GUI.handleMousePressed();
+}
+
+void mouseReleased() {
+    GUI.handleMouseReleased();
+}
+
+void update()
 {
+    if (gameIsOver()) {
+        println("Game over");
+        exit();
+    }
+
     // Update the grid array
     grid[player.x][player.y] = player.arrayRepresentation;
     for (int i = 0; i < enemies.size(); i++) {
@@ -93,23 +92,24 @@ void updateEntities()
     for (int i = 0; i < foods.size(); i++) {
         grid[foods.get(i).x][foods.get(i).y] = foods.get(i).arrayRepresentation;
     }
-    
-    // Call update on everyone
+
+    // Update entities
     player.update();
-    
+
     for (int i = 0; i < enemies.size(); i++) {
         enemies.get(i).update();
     }
-    
+
     for (int i = 0; i < foods.size(); i++) {
         foods.get(i).update();
     }
-    
+
     resolveCollisions();
 }
 
-
-
+boolean gameIsOver() {
+    return (player.health <= 0 ? true : false);
+}
 
 void resolveCollisions() {
     // Collision with enemies
@@ -132,6 +132,7 @@ void resolveCollisions() {
 }
 
 void clearBoard() {
+    strokeWeight(1);
     for (int x = 0; x < grid.length; x++) {
         for (int y = 0; y < grid[0].length; y++) {
             grid[x][y] = 0;
@@ -140,6 +141,7 @@ void clearBoard() {
 }
 
 void drawBoard() {
+    strokeWeight(1);
     for (int x = 0; x < grid.length; x++) {
         for (int y = 0; y < grid[0].length; y++) {
             color c = getColorFromInt(grid[x][y]);

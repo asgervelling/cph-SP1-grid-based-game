@@ -50,7 +50,6 @@ class Food extends Actor {
         int newX = randInt(grid.length - 1);
         int newY = randInt(grid[0].length - 1);
         if (newX == player.x && newY == player.y) {
-            println("Same same but no different");
             resolveEdgeCollision();
         }
         this.x = newX;
