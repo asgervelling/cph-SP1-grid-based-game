@@ -1,6 +1,6 @@
 void newGame(int numEnemies, int numFoods) {
     player = new Player(4, 4);
-    transition = new TransitionOverlay();
+    countdownTransition = new CountdownTransition();
 
     for (int i = 0; i < numEnemies; i++)
     {

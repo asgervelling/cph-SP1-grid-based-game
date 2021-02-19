@@ -76,7 +76,8 @@ class Player extends Actor {
 
     void becomeInvincible() {
         /* Player is invincible and moved away from enemies when health is lost */
-        invincibleTimer = 100;        
+        invincibleTimer = 100;
+        /*
         int newX, newY;
         
         String currentQuadrant = getCurrentQuadrant();
@@ -104,7 +105,8 @@ class Player extends Actor {
                 newY = 20;
         }
         this.x = newX;
-        this.y = newY;        
+        this.y = newY;    
+        */
     }
 
     void displayInvincibility() {

@@ -17,7 +17,5 @@ int placedBelow(Button b) {
     int originIndex = getButtonIndex(b);
     int originY = b.GUI.buttons.get(originIndex).y;
     int y = originY + b.margin + b.h;
-    println("Origin button y: " + originY);
-    println("New y: "+ y);
     return y;
 }

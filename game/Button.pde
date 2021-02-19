@@ -33,6 +33,7 @@ class Button extends GUIElement {
         
         textSize(this.fontSize);
         textFont(this.font);
+        textAlign(BASELINE, BASELINE);
         fill(255);
         text(this.btnText, this.x + super.padding, this.textY);
     }
@@ -40,7 +41,6 @@ class Button extends GUIElement {
     // Layout
     int autoScaleFontSize() {
         int fontSize = this.h - 2 * this.padding;
-        println("Fontsize: " + fontSize);
         if (fontSize <= 0) {
             println("Fontsize <= 0. Padding too large.");
             exit();
@@ -50,10 +50,7 @@ class Button extends GUIElement {
     
     int getTextY() {
         /* Center the text vertically within the button */
-        println("Button y: " + this.y);
-        println("Button h: " + this.h);
         int yCenter = this.y + (this.h / 2 + (int)textAscent());
-        println("Text y: " + yCenter + "\n");
         return yCenter;
     }
     

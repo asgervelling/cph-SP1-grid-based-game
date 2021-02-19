@@ -7,15 +7,14 @@ final int tileSize = 16;
 Player player;
 ArrayList<Enemy> enemies = new ArrayList<Enemy>();
 ArrayList<Food> foods = new ArrayList<Food>();
-TransitionOverlay transition;
+CountdownTransition countdownTransition;
 
 GraphicalUserInterface GUI;
 
 void setup() {
     size(1280, 720);
     GUI = initMainMenuGUI();
-    newGame(3, 3);
-    
+    newGame(3, 3);    
 }
 
 void draw() {    
@@ -29,6 +28,9 @@ void draw() {
             clearBoard();
             update();
             drawBoard();
+            if (countdownTransition.timeLeft > 0) {
+                countdownTransition.display();
+            }
     }
 }
 
@@ -84,6 +86,9 @@ void update()
         println("Game over");
         exit();
     }
+    if (gameWon()) {
+        enableSlowMotion();
+    }
 
     // Update the grid array
     grid[player.x][player.y] = player.arrayRepresentation;
@@ -95,9 +100,8 @@ void update()
     }
 
     // Update entities
-    transition.update();
-    transition.display();
-    if (transition.timeLeft < 0) {
+    countdownTransition.update();
+    if (countdownTransition.timeLeft < 0) {
         player.update();
         for (int i = 0; i < enemies.size(); i++) {
             enemies.get(i).update();
@@ -113,6 +117,10 @@ void update()
 
 boolean gameIsOver() {
     return (player.health <= 0 ? true : false);
+}
+
+boolean gameWon() {
+    return (foods.isEmpty() ? true : false);
 }
 
 void resolveCollisions() {
@@ -190,3 +198,9 @@ void printBoard() {
     }
     print("\n");
 }
+
+void enableSlowMotion() {
+    
+}
+
+void disableSlowMotion () {}
