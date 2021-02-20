@@ -1,4 +1,8 @@
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Scanner;
+import java.io.File;
+import java.io.FileNotFoundException;
 
 String scene = "mainMenu";
 int[][] grid = new int[80][45];
@@ -8,20 +12,25 @@ Player player;
 ArrayList<Enemy> enemies = new ArrayList<Enemy>();
 ArrayList<Food> foods = new ArrayList<Food>();
 CountdownTransition countdownTransition;
-GraphicalUserInterface GUI;
+GraphicalUserInterface mainMenuGUI;
+GraphicalUserInterface highscoresGUI;
+GraphicalUserInterface HUD;
+
+int numEnemies = 3;
 
 void setup() {
     size(1280, 720);
-    GUI = initMainMenuGUI();
-    newGame(3, 3);
+    mainMenuGUI = initMainMenuGUI();
+    highscoresGUI = initHighscoresGUI();
+    newGame(numEnemies, 3);
 }
 
 void draw() {    
     switch (scene) {
         case "mainMenu":
             drawBoard();
-            GUI.update();
-            GUI.display();
+            mainMenuGUI.update();
+            mainMenuGUI.display();
             break;
         case "game":
             clearBoard();
@@ -31,6 +40,13 @@ void draw() {
             if (countdownTransition.timeLeft > 0) {
                 countdownTransition.display();
             }
+            break;
+        case "highscores":
+            drawBoard();
+            highscoresGUI.update();
+            highscoresGUI.display();
+            break;
+            
     }
 }
 
@@ -103,11 +119,26 @@ void keyReleased() {
 }
 
 void mousePressed() {
-    GUI.handleMousePressed();
+    switch (scene) {
+        case "mainMenu":
+            mainMenuGUI.handleMousePressed();
+            break;
+        case "highscores":
+            highscoresGUI.handleMousePressed();
+            break;
+    }
+    
 }
 
 void mouseReleased() {
-    GUI.handleMouseReleased();
+    switch (scene) {
+        case "mainMenu":
+            mainMenuGUI.handleMouseReleased();
+            break;
+        case "highscores":
+            highscoresGUI.handleMouseReleased();
+            break;
+    }
 }
 
 void update()
@@ -118,6 +149,12 @@ void update()
     }
     if (gameWon()) {
         explodeEnemies();
+    }
+    
+    if (enemies.isEmpty()) {
+        // Go to next level, make it harder
+        numEnemies += 3;
+        newGame(numEnemies, 3);
     }
 
     // Update entities

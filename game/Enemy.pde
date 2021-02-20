@@ -26,7 +26,7 @@ class Enemy extends Actor {
         if (freeTimer < 0) {
             enemies.remove(this);
         }
-        // moveTowardsPlayer();
+        moveTowardsPlayer();
         explosion.update();
     }
     

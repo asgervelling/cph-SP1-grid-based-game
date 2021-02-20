@@ -13,9 +13,26 @@ int getButtonIndex(Button b) {
     return -1;
 }
 
+int getLabelIndex(Label l) {
+    String s = l.labelText;
+    for (int i = 0; i < l.GUI.labels.size(); i++) {
+        if (l.GUI.labels.get(i).labelText == s) {
+            return i;
+        }
+    }
+    return -1;
+}
+
 int placedBelow(Button b) {
     int originIndex = getButtonIndex(b);
     int originY = b.GUI.buttons.get(originIndex).y;
     int y = originY + b.margin + b.h;
+    return y;
+}
+
+int placedBelow(Label l) {
+    int originIndex = getLabelIndex(l);
+    int originY = l.GUI.labels.get(originIndex).y;
+    int y = originY + l.margin + l.h;
     return y;
 }

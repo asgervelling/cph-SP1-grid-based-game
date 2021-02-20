@@ -27,7 +27,25 @@ abstract class GUIElement {
         GUI.buttons.add(b);
     }
     
+    void registerLabel(Label l) {
+        GUI.labels.add(l);
+    }
+    
     void registerElement() {
         GUI.elements.add(this);
+    }
+    
+    int autoScaleFontSize() {
+        int fontSize = this.h - 2 * this.padding;
+        if (fontSize <= 0) {
+            println("Fontsize <= 0. Padding too large.");
+            exit();
+        }
+        return fontSize;
+    }
+    
+    int getTextY() {
+        int yCenter = this.y + (this.h / 2 + (int)textAscent());
+        return yCenter;
     }
 }

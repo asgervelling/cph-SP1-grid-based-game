@@ -1,10 +1,12 @@
 class GraphicalUserInterface {
     ArrayList<GUIElement> elements;
     ArrayList<Button> buttons;
+    ArrayList<Label> labels;
     
     GraphicalUserInterface() {
         elements = new ArrayList<GUIElement>();
         buttons = new ArrayList<Button>();
+        labels = new ArrayList<Label>();
     }
     
     void update() {
@@ -35,5 +37,4 @@ class GraphicalUserInterface {
             buttons.get(i).onMouseReleased();
         }
     }
-    
 }

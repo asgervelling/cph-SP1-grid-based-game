@@ -38,22 +38,6 @@ class Button extends GUIElement {
         text(this.btnText, this.x + super.padding, this.textY);
     }
     
-    // Layout
-    int autoScaleFontSize() {
-        int fontSize = this.h - 2 * this.padding;
-        if (fontSize <= 0) {
-            println("Fontsize <= 0. Padding too large.");
-            exit();
-        }
-        return fontSize;
-    }
-    
-    int getTextY() {
-        /* Center the text vertically within the button */
-        int yCenter = this.y + (this.h / 2 + (int)textAscent());
-        return yCenter;
-    }
-    
     // Functionality
     void onMouseHover() {
         if (!mouseInsideRect(this.x, this.y, this.w, this.h)) {
@@ -78,9 +62,17 @@ class Button extends GUIElement {
             return;
         }
         this.beingPressed = false;
+        println("Button lcicked");
         switch (btnText) {
             case "Play":
                 scene = "game";
+                break;
+            case "Highscores":
+                scene = "highscores";
+                break;
+            case "Back":
+                println("Pressed back");
+                scene = "mainMenu";
                 break;
         }
     }

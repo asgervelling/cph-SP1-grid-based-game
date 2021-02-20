@@ -1,0 +1,4 @@
+Jonathan:5;
+Karl:12;
+Johannes:23;
+Karen:19;

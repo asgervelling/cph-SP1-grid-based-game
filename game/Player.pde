@@ -89,8 +89,8 @@ class Player extends Actor {
     
     void runTimers() {
         /* Timers always decrement. Do something if their value >= 0 */
-        invincibleTimer--;
-        blinkingTimer--;
+        this.invincibleTimer--;
+        this.blinkingTimer--;
     }
     
     void expandBody(int keyDown) {
