@@ -13,7 +13,7 @@ class Food extends Actor {
     void update() {
         standStillTimer--;
         if (!(standStillTimer > 0)) {
-            // moveAwayFromPlayer();
+            moveAwayFromPlayer();
         }
     }
     

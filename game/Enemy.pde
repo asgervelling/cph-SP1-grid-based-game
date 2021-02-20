@@ -13,9 +13,9 @@ class Enemy extends Actor {
         this.player = player;
         this.c = color(255, 0, 0);
         this.exploded = false;
-        this.freeTimer = 90;
+        this.freeTimer = 200;
         this.queueingFree = false;
-        this.explosion = new Explosion(x, y);
+        this.explosion = new Explosion();
     }
     
     @Override
@@ -76,8 +76,8 @@ class Enemy extends Actor {
         if (this.exploded) {
             return;
         }
-        this.explosion = new Explosion(this.x, this.y);
-        this.explosion.trigger();
+        this.explosion = new Explosion();
+        this.explosion.trigger(this.x, this.y);
         this.queueFree();
         this.exploded = true;
 

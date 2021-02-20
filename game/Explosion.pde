@@ -4,9 +4,9 @@ class Explosion {
     boolean triggered;
     int numParticles;
     
-    Explosion(int x, int y) {
-        this.x = x;
-        this.y = y;
+    Explosion() {
+        this.x = 0;
+        this.y = 0;
         this.particles = new ArrayList<Particle>();
         this.triggered = false;
         this.numParticles = 12;
@@ -30,8 +30,14 @@ class Explosion {
         }
     }
     
-    void trigger() {
+    void setXY(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+    
+    void trigger(int x, int y) {
         // Load...
+        this.setXY(x, y);
         int w = 4;
         int h = 4;
         float[] xRange = {0f, (float)this.numParticles};
@@ -43,7 +49,6 @@ class Explosion {
             float initialVelY = translateToRange((float)i, yRange, translatedYRange) + random(-0.5, 0.5);
             particles.add(new Particle(x, y, w, h, initialVelX, initialVelY));
         }
-        println("Explosion at " + this.x, this.y + "\n");
         
         // Fire!
         this.triggered = true;

@@ -14,12 +14,10 @@ class Particle {
         this.velX = initialVelX;
         this.velY = initialVelY;
         
-        println("Particle at " + this.x, this.y);
     }
     
     void update() {
         moveWithGravity(0.1);
-        println(this.x, this.y);
     }
     
     void display() {
@@ -30,8 +28,12 @@ class Particle {
     
     void moveWithGravity(float gravity) {
         this.velY += gravity;
-        
+            
         this.y += this.velY;
         this.x += this.velX;
     }
+    
+
+
+    
 }

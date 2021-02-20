@@ -13,7 +13,7 @@ GraphicalUserInterface GUI;
 void setup() {
     size(1280, 720);
     GUI = initMainMenuGUI();
-    newGame(3, 1);
+    newGame(3, 3);
 }
 
 void draw() {    
@@ -39,17 +39,32 @@ void keyPressed() {
     final int ARROWRIGHT = 1;
     final int ARROWUP = 2;
     final int ARROWDOWN = 3;
-    if (keyCode == LEFT) {
-        player.arrowKeysPressed[ARROWLEFT] = true;
+    if (key == CODED) {
+        if (keyCode == LEFT) {
+            player.arrowKeysPressed[ARROWLEFT] = true;
+        }
+        if (keyCode == RIGHT) {
+            player.arrowKeysPressed[ARROWRIGHT] = true;
+        }
+        if (keyCode == UP) {
+            player.arrowKeysPressed[ARROWUP] = true;
+        }
+        if (keyCode == DOWN) {
+            player.arrowKeysPressed[ARROWDOWN] = true;
+        } 
+    } 
+    
+    if (key == 'w' || key == 'W') {
+        player.WASDKeysPressed[0] = true;
     }
-    if (keyCode == RIGHT) {
-        player.arrowKeysPressed[ARROWRIGHT] = true;
+    if (key == 'a' || key == 'A') {
+        player.WASDKeysPressed[1] = true;
     }
-    if (keyCode == UP) {
-        player.arrowKeysPressed[ARROWUP] = true;
+    if (key == 's' || key == 'S') {
+        player.WASDKeysPressed[2] = true;
     }
-    if (keyCode == DOWN) {
-        player.arrowKeysPressed[ARROWDOWN] = true;
+    if (key == 'd' || key == 'D') {
+        player.WASDKeysPressed[3] = true;
     }
 }
 
@@ -58,18 +73,33 @@ void keyReleased() {
     final int ARROWRIGHT = 1;
     final int ARROWUP = 2;
     final int ARROWDOWN = 3;
-    if (keyCode == LEFT) {
-        player.arrowKeysPressed[ARROWLEFT] = false;
+    if (key == CODED) {
+        if (keyCode == LEFT) {
+            player.arrowKeysPressed[ARROWLEFT] = false;
+        }
+        if (keyCode == RIGHT) {
+            player.arrowKeysPressed[ARROWRIGHT] = false;
+        }
+        if (keyCode == UP) {
+            player.arrowKeysPressed[ARROWUP] = false;
+        }
+        if (keyCode == DOWN) {
+            player.arrowKeysPressed[ARROWDOWN] = false;
+        }
     }
-    if (keyCode == RIGHT) {
-        player.arrowKeysPressed[ARROWRIGHT] = false;
+    if (key == 'w' || key == 'W') {
+        player.WASDKeysPressed[0] = false;
     }
-    if (keyCode == UP) {
-        player.arrowKeysPressed[ARROWUP] = false;
+    if (key == 'a' || key == 'A') {
+        player.WASDKeysPressed[1] = false;
     }
-    if (keyCode == DOWN) {
-        player.arrowKeysPressed[ARROWDOWN] = false;
+    if (key == 's' || key == 'S') {
+        player.WASDKeysPressed[2] = false;
     }
+    if (key == 'd' || key == 'D') {
+        player.WASDKeysPressed[3] = false;
+    }
+    
 }
 
 void mousePressed() {
@@ -83,20 +113,11 @@ void mouseReleased() {
 void update()
 {
     if (gameIsOver()) {
-        //println("Game over");
-        //exit();
+        println("Game over");
+        exit();
     }
     if (gameWon()) {
         explodeEnemies();
-    }
-
-    // Update the grid array
-    grid[player.x][player.y] = player.arrayRepresentation;
-    for (int i = 0; i < enemies.size(); i++) {
-        grid[enemies.get(i).x][enemies.get(i).y] = enemies.get(i).arrayRepresentation;
-    }
-    for (int i = 0; i < foods.size(); i++) {
-        grid[foods.get(i).x][foods.get(i).y] = foods.get(i).arrayRepresentation;
     }
 
     // Update entities
@@ -110,9 +131,18 @@ void update()
         for (int i = 0; i < foods.size(); i++) {
             foods.get(i).update();
         }
-    
+        
         resolveCollisions();
     }    
+    
+    // Update the grid array
+    grid[player.x][player.y] = player.arrayRepresentation;
+    for (int i = 0; i < enemies.size(); i++) {
+        grid[enemies.get(i).x][enemies.get(i).y] = enemies.get(i).arrayRepresentation;
+    }
+    for (int i = 0; i < foods.size(); i++) {
+        grid[foods.get(i).x][foods.get(i).y] = foods.get(i).arrayRepresentation;
+    }
 }
 
 boolean gameIsOver() {
@@ -141,6 +171,15 @@ void resolveCollisions() {
             }
         }
     }
+}
+
+int getFoodIndex(int x, int y) {
+    for (int i = 0; i < foods.size(); i++) {
+        if (foods.get(i).x == x && foods.get(i).y == y) {
+            return i;
+        }
+    }
+    return -1;
 }
 
 void clearBoard() {
@@ -181,7 +220,7 @@ color getColorFromInt(int repr)
     case 0: // Nothing
         c = bgColor;
         break;
-    case 1: 
+    case 1:
         // Food
         c = color(0, 255, 0);
         break;

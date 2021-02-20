@@ -5,7 +5,17 @@ class Player extends Actor {
     int invincibleTimer = 0;
     int blinkingTimer = 0;
 
+    final int ARROWLEFT = 0;
+    final int ARROWRIGHT = 1;
+    final int ARROWUP = 2;
+    final int ARROWDOWN = 3;
+    final int W = 0;
+    final int A = 1;
+    final int S = 2;
+    final int D = 3;
     boolean[] arrowKeysPressed = {false, false, false, false};
+    boolean[] WASDKeysPressed = {false, false, false, false};
+    int[] bodyExpansions = {0, 0, 0, 0};
     final int arrayRepresentation = 3;
 
     color primaryColor = color(0, 0, 255);
@@ -13,19 +23,31 @@ class Player extends Actor {
 
     color c = primaryColor;
 
-    final int ARROWLEFT = 0;
-    final int ARROWRIGHT = 1;
-    final int ARROWUP = 2;
-    final int ARROWDOWN = 3;
-
     Player(int x, int y) {
         super(x, y);
     }
 
     @Override
-    void update() {
-        c = color(0, 0, 255);
+    void update() {    
+        handleKeyboardInput();
+    
+        // Make invincible for a short timer after collision with enemy
+        runTimers();
+        if (this.isInvincible()) {
+            this.displayInvincibility();
+        } else {
+            this.c = primaryColor;
+        }
         
+        println(this.health);
+    }
+    
+    @Override
+    void resolveEdgeCollision() {
+        return;
+    }
+    
+    void handleKeyboardInput() {
         // Movement
         if (arrowKeysPressed[ARROWLEFT]) {
             super.move(-1, 0);
@@ -38,19 +60,31 @@ class Player extends Actor {
         } else if (arrowKeysPressed[ARROWDOWN]) {
             super.move(0, 1);
         }
-    
-        // Make invincible for a short timer after collision with enemy
-        runTimers();
-        if (this.isInvincible()) {
-            this.displayInvincibility();
+        
+        // Expand body with WASD
+        if (WASDKeysPressed[W]) {
+            expandBody(W);
         } else {
-            this.c = primaryColor;
+            diminishBody(W);
         }
-    }
-    
-    @Override
-    void resolveEdgeCollision() {
-        return;
+        
+        if (WASDKeysPressed[A]) {
+            expandBody(A);
+        } else {
+            diminishBody(A);
+        }
+        
+        if (WASDKeysPressed[S]) {
+            expandBody(S);
+        } else {
+            diminishBody(S);
+        }
+        
+        if (WASDKeysPressed[D]) {
+            expandBody(D);
+        } else {
+            diminishBody(D);
+        }
     }
     
     void runTimers() {
@@ -58,13 +92,73 @@ class Player extends Actor {
         invincibleTimer--;
         blinkingTimer--;
     }
+    
+    void expandBody(int keyDown) {
+        /* Expand this' body in order to more easily get food */
+        int maxExpansion = 12;
+        this.bodyExpansions[keyDown] = (this.bodyExpansions[keyDown] >= maxExpansion ? maxExpansion : this.bodyExpansions[keyDown] + 1);
+        for (int i = 0; i < this.bodyExpansions[keyDown]; i++) {
+            try {
+                switch (keyDown) {
+                    case W:
+                        tryBodyExpansion(this.x, this.y - i);
+                        break;
+                    case A:
+                        tryBodyExpansion(this.x - i, this.y);
+                        break;
+                    case S:
+                        tryBodyExpansion(this.x, this.y + i);
+                        break;
+                    case D:
+                        tryBodyExpansion(this.x + i, this.y);
+                        break;
+                }
+            } catch (ArrayIndexOutOfBoundsException e) {
+                continue;
+            }
+        }
+    }
+    
+    void tryBodyExpansion(int x, int y) {
+        for (int i = 0; i < enemies.size(); i++) {
+            if (enemies.get(i).x == x && enemies.get(i).y == y) {
+                // An enemy is here
+                if (!player.isInvincible()) {
+                    this.becomeInvincible();
+                    this.health--;
+                    return;
+                }
+            }
+        }
+        for (int i = 0; i < foods.size(); i++) {
+            if (foods.get(i).x == x && foods.get(i).y == y) {
+                // There is food here
+                foods.remove(getFoodIndex(x, y));
+                return;
+            }
+        }
+        grid[x][y] = arrayRepresentation;
+    }
+    
+    void diminishBody(int keyDown) {
+        this.bodyExpansions[keyDown] = (this.bodyExpansions[keyDown] > 0 ? this.bodyExpansions[keyDown] - 1 : 0);
+    }
+    
+    boolean bodyExpanded() {
+        for (int i = 0; i < 4; i++) {
+            if (bodyExpansions[i] > 0) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     boolean collidesWith(Actor a) {
         if (this.x == a.x &&
             this.y == a.y) {
             return true;
         }
-        return false;
+        return false;  
     }
 
     boolean isInvincible() {
@@ -77,36 +171,6 @@ class Player extends Actor {
     void becomeInvincible() {
         /* Player is invincible and moved away from enemies when health is lost */
         invincibleTimer = 100;
-        /*
-        int newX, newY;
-        
-        String currentQuadrant = getCurrentQuadrant();
-        switch (currentQuadrant) {
-            case "lowerRight":
-                // Spawn in the upper left side
-                newX = 5;
-                newY = 5;
-                break;
-            case "lowerLeft":
-                newX = grid.length - 5;
-                newY = 5;
-                break;
-            case "upperRight":
-                newX = 5;
-                newY = grid[0].length - 5;
-                break;
-            case "upperLeft":
-                newX = grid.length - 5;
-                newY = grid[0].length - 5;
-                break;
-            default:
-                println("This shouldn't happen");
-                newX = 40;
-                newY = 20;
-        }
-        this.x = newX;
-        this.y = newY;    
-        */
     }
 
     void displayInvincibility() {
@@ -120,26 +184,5 @@ class Player extends Actor {
         } else {
             this.c = primaryColor;
         }
-    }
-    
-    String getCurrentQuadrant() {
-        /* Find out which quarter of the map, the player is standing within */
-        String xString, yString;
-        String quadrant;
-        
-        if (this.x < grid.length / 2) {
-            xString = "Left";
-        } else {
-            xString = "Right";
-        }
-        
-        if (this.y < grid[0].length / 2) {
-            yString = "upper";
-        } else {
-            yString = "lower";
-        }
-        
-        quadrant = yString + xString;       
-        return quadrant;
     }
 }
