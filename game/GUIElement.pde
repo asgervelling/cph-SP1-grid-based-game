@@ -35,6 +35,14 @@ abstract class GUIElement {
         GUI.elements.add(this);
     }
     
+    void registerCheckbox(Checkbox c) {
+        GUI.checkbox = c;
+    }
+    
+    void registerTextField(TextField t) {
+        GUI.textField = t;
+    }
+    
     int autoScaleFontSize() {
         int fontSize = this.h - 2 * this.padding;
         if (fontSize <= 0) {

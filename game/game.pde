@@ -2,7 +2,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+
 
 String scene = "mainMenu";
 int[][] grid = new int[80][45];
@@ -15,11 +18,13 @@ CountdownTransition countdownTransition;
 GraphicalUserInterface mainMenuGUI;
 GraphicalUserInterface highscoresGUI;
 GraphicalUserInterface HUD;
+PlayerStats playerStats;
 
 int numEnemies = 3;
 
 void setup() {
     size(1280, 720);
+    playerStats = new PlayerStats();
     mainMenuGUI = initMainMenuGUI();
     highscoresGUI = initHighscoresGUI();
     newGame(numEnemies, 3);

@@ -1,2 +1,2 @@
-username:yyyyyyy;
+username:none;
 tutorialNeeded:true;

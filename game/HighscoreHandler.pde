@@ -12,7 +12,7 @@ class HighscoreHandler {
         try {
             // The undocumented dataPath() method tells File() to look inside the /data folder
             s = new Scanner(new File(dataPath(file)));
-        } catch (FileNotFoundException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
         
