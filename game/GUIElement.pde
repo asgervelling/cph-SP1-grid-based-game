@@ -53,7 +53,7 @@ abstract class GUIElement {
     }
     
     int getTextY() {
-        int yCenter = this.y + (this.h / 2 + (int)textAscent());
+        int yCenter = this.y + (this.h / 2) + 12;
         return yCenter;
     }
 }

@@ -17,9 +17,7 @@ class TextField extends GUIElement {
     }
     
     @Override
-    void update() {
-        // receiveKey();
-    }
+    void update() {}
 
     @Override
     void display() {
@@ -56,11 +54,8 @@ class TextField extends GUIElement {
         return sanitizedName;
     }
     
-    String submit(String nextScene, PlayerStats playerStats) {
-        /* Get username from nameString and return nextScene */
-        playerStats.username = nameString;
-        playerStats.writeConfig(nameString, playerStats.tutorialNeeded("config.txt"), "config.txt");
-        
-        return nextScene;
+    void submit() {
+        /* Get username from nameString and write it to config.txt */
+        playerStats.writeConfig(nameString, playerStats.tutorialNeeded());
     }
 }

@@ -3,13 +3,16 @@ class HighscoreHandler {
     ArrayList<String> sortedNames;
     ArrayList<Integer> sortedScores;
     
-    HighscoreHandler(String file) {
-        this.file = file;
+    HighscoreHandler() {
+        this.file = "highscores.txt";
         this.sortedNames = new ArrayList<String>();
         this.sortedScores = new ArrayList<Integer>();
     }
     
     void addScore(String name, int score) {
+        if (score == 0) {
+            return;
+        }
         this.loadHighscores();
 
         try {            
@@ -57,30 +60,5 @@ class HighscoreHandler {
             println("HighscoreHandler.loadHighscores() failed");
         }
     }
-    /*
-    HashMap<String, Integer> loadHighscores() {
-        HashMap<String, Integer> hsMap = new HashMap<String, Integer>();
-        // The scanner must be initialized, but it must also catch the exception - a paradox, hence the temporary "System.in".
-        Scanner s = new Scanner(System.in);
-        try {
-            // The undocumented dataPath() method tells File() to look inside the /data folder
-            s = new Scanner(new File(dataPath(file)));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        
-        while(s.hasNext()) {
-            try {
-                String[] parts = s.next().split(":");
-                String part0 = parts[0];
-                String part1 = parts[1].substring(0, parts[1].length() - 1);
-                hsMap.put(part0, Integer.parseInt(part1));
-            } catch (ArrayIndexOutOfBoundsException e) {
-                e.printStackTrace();
-            }
-        }
-        
-        return hsMap;
-    }
-    */
+    
 }

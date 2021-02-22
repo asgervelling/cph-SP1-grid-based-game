@@ -30,6 +30,16 @@ class Enemy extends Actor {
         explosion.update();
     }
     
+    void randomMove() {
+        int randomMoveX = randInt(-1, 1);
+        int randomMoveY = randInt(-1, 1);
+        if (this.x + randomMoveX == this.player.x &&
+            this.y + randomMoveY == this.player.y) {
+                randomMove();
+            }
+        super.move(randomMoveX, randomMoveY);
+    }
+    
     void moveTowardsPlayer() {
         if (moveTimer < 0) {
             moveTimer = 0;
@@ -42,9 +52,7 @@ class Enemy extends Actor {
     
         float randomMoveProbability = random(0f, 1f);    
         if (randomMoveProbability < 0.25) {
-            int randomMoveX = randInt(-1, 1);
-            int randomMoveY = randInt(-1, 1);
-            super.move(randomMoveX, randomMoveY);
+            randomMove();
         } else {
             if (moveTimer == 0) {
                 if (xDistance > yDistance)

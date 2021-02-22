@@ -11,7 +11,7 @@ abstract class Actor {
     abstract void update();
 
     void move(int xDir, int yDir) {
-        if (!gameWon()) {
+        if (!roundWon()) {
             if (xDir == -1 && this.x - 1 < 0 ||
                 xDir == 1 && this.x + 1 > grid.length - 1 ||
                 yDir == -1 && this.y - 1 < 0 ||

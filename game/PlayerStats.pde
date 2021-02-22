@@ -1,19 +1,18 @@
 class PlayerStats {
     /* Stats that are reset when the program is closed/opened. Initialize only once. */
-    String username;
     int health, points;
+    String configFile;
     
     PlayerStats () {
-        this.username = "none";
+        this.configFile = "config.txt";
         this.health = 3;
         this.points = 0;
     }
     
-    boolean tutorialNeeded(String configFile) {
+    boolean tutorialNeeded() {
         try {
             Scanner s = new Scanner(new File(dataPath(configFile)));
             while (s.hasNext()) {
-                println("tutorialNeeded()");
                 String[] parts = s.next().split(":");
                 String configVar = parts[0];
                 boolean value = Boolean.parseBoolean(parts[1].substring(0, parts[1].length() - 1));
@@ -29,7 +28,7 @@ class PlayerStats {
         return true;
     }
     
-    String getUsernameFromConfig(String configFile) {
+    String getUsernameFromConfig() {
         try {
             Scanner s = new Scanner(new File(dataPath(configFile)));
             int getUsername = 0;
@@ -52,7 +51,7 @@ class PlayerStats {
         return "";
     }
     
-    void writeConfig(String username, boolean tutorialNeeded, String configFile) {
+    void writeConfig(String username, boolean tutorialNeeded) {
         try {
             FileWriter writer = new FileWriter(dataPath(configFile));
             BufferedWriter buffer = new BufferedWriter(writer);

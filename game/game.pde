@@ -12,30 +12,52 @@ int[][] grid = new int[80][45];
 final int tileSize = 16;
 
 Player player;
-ArrayList<Enemy> enemies = new ArrayList<Enemy>();
-ArrayList<Food> foods = new ArrayList<Food>();
+ArrayList<Enemy> enemies;
+ArrayList<Food> foods;
 CountdownTransition countdownTransition;
 GraphicalUserInterface mainMenuGUI;
 GraphicalUserInterface highscoresGUI;
-GraphicalUserInterface HUD;
+GraphicalUserInterface enterNameGUI;
+GraphicalUserInterface tutorialGUI;
 PlayerStats playerStats;
 
 int numEnemies = 3;
 
 void setup() {
     size(1280, 720);
+    resetGame();
+}
+
+void resetGame() {
     playerStats = new PlayerStats();
     mainMenuGUI = initMainMenuGUI();
     highscoresGUI = initHighscoresGUI();
+    enterNameGUI = initEnterNameGUI();
+    tutorialGUI = initTutorialGUI();
     newGame(numEnemies, 3);
+    numEnemies = 3;
 }
 
 void draw() {    
+    // println("Username and bool: " + playerStats.getUsernameFromConfig(), playerStats.tutorialNeeded());
     switch (scene) {
         case "mainMenu":
             drawBoard();
             mainMenuGUI.update();
             mainMenuGUI.display();
+            break;
+        case "tutorial":
+            println(tutorialGUI.buttons.get(0).beingPressed);
+            println(tutorialGUI.checkbox.beingPressed);
+            println();
+            drawBoard();
+            tutorialGUI.update();
+            tutorialGUI.display();
+            break;
+        case "enterName":
+            drawBoard();
+            enterNameGUI.update();
+            enterNameGUI.display();
             break;
         case "game":
             clearBoard();
@@ -87,6 +109,9 @@ void keyPressed() {
     if (key == 'd' || key == 'D') {
         player.WASDKeysPressed[3] = true;
     }
+    if (scene == "enterName") {
+        enterNameGUI.textField.receiveKey(key);
+    }
 }
 
 void keyReleased() {
@@ -131,6 +156,12 @@ void mousePressed() {
         case "highscores":
             highscoresGUI.handleMousePressed();
             break;
+        case "tutorial":
+            tutorialGUI.handleMousePressed();
+            break;
+        case "enterName":
+            enterNameGUI.handleMousePressed();
+            break;
     }
     
 }
@@ -143,16 +174,24 @@ void mouseReleased() {
         case "highscores":
             highscoresGUI.handleMouseReleased();
             break;
+        case "tutorial":
+            tutorialGUI.handleMouseReleased();
+            break;
+        case "enterName":
+            enterNameGUI.handleMouseReleased();
+            break;
     }
 }
 
 void update()
 {
     if (gameIsOver()) {
-        println("Game over");
-        exit();
+        HighscoreHandler hh = new HighscoreHandler();
+        hh.addScore(playerStats.getUsernameFromConfig(), playerStats.points);
+        resetGame();
+        scene = "mainMenu";
     }
-    if (gameWon()) {
+    if (roundWon()) {
         explodeEnemies();
     }
     
@@ -188,10 +227,10 @@ void update()
 }
 
 boolean gameIsOver() {
-    return (player.health <= 0 ? true : false);
+    return (playerStats.health <= 0 ? true : false);
 }
 
-boolean gameWon() {
+boolean roundWon() {
     return (foods.isEmpty() ? true : false);
 }
 
@@ -199,18 +238,14 @@ void resolveCollisions() {
     // Collision with enemies
     for (int i = 0; i < enemies.size(); i++) {
         if (player.collidesWith(enemies.get(i))) {
-            if (!player.isInvincible()) {
-                player.health--;
-                player.becomeInvincible();
-            }
+            player.loseHealth();
         }
     }
     // Collision with food
     for (int i = 0; i < foods.size(); i++) {
         if (player.collidesWith(foods.get(i))) {
-            if (!player.isInvincible()) {
-                foods.remove(i);
-            }
+            player.gainPoint();
+            foods.remove(i);
         }
     }
 }
@@ -268,7 +303,7 @@ color getColorFromInt(int repr)
         break;
     case 2: 
         // Enemy
-        if (!gameWon()) {
+        if (!roundWon()) {
             c = enemies.get(0).c;
             break;
         } else {

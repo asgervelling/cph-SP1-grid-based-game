@@ -19,6 +19,11 @@ class Checkbox extends GUIElement {
     
     @Override
     void display() {
+        if (beingPressed) {
+            this.bgColor = color(127);
+        } else {
+            this.bgColor = color(0);
+        }
         fill(super.bgColor);
         stroke(super.strokeColor);
         strokeWeight(5);
@@ -33,12 +38,15 @@ class Checkbox extends GUIElement {
     
     void onMouseHover() {
         if (!mouseInsideRect(this.x, this.y, this.w, this.h)) {
+            this.beingPressed = false;
             this.bgColor = color(0);
             return;
         }
+        /*
         if (!beingPressed) {
             this.bgColor = color(127);
         }
+        */
     }
     
     void onMousePressed() {
@@ -58,9 +66,9 @@ class Checkbox extends GUIElement {
         switch (method) {
             case "doNotShowAgain":
                 if (ticked) {
-                    playerStats.writeConfig(playerStats.getUsernameFromConfig("config.txt"), false, "config.txt");
+                    playerStats.writeConfig(playerStats.getUsernameFromConfig(), false);
                 } else {
-                    playerStats.writeConfig(playerStats.getUsernameFromConfig("config.txt"), true, "config.txt");
+                    playerStats.writeConfig(playerStats.getUsernameFromConfig(), true);
                 }
                 break;
         }

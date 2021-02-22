@@ -39,7 +39,7 @@ class Player extends Actor {
             this.c = primaryColor;
         }
         
-        println(this.health);
+        println(playerStats.health);
     }
     
     @Override
@@ -119,20 +119,31 @@ class Player extends Actor {
         }
     }
     
+    void loseHealth() {
+        if (!player.isInvincible()) {
+            this.becomeInvincible();
+            playerStats.health--;
+            return;
+        }
+    }
+    
+    void gainPoint() {
+        if (!player.isInvincible()) {
+            playerStats.points++;
+        }
+    }
+    
     void tryBodyExpansion(int x, int y) {
         for (int i = 0; i < enemies.size(); i++) {
             if (enemies.get(i).x == x && enemies.get(i).y == y) {
                 // An enemy is here
-                if (!player.isInvincible()) {
-                    this.becomeInvincible();
-                    this.health--;
-                    return;
-                }
+                this.loseHealth();
             }
         }
         for (int i = 0; i < foods.size(); i++) {
             if (foods.get(i).x == x && foods.get(i).y == y) {
                 // There is food here
+                this.gainPoint();
                 foods.remove(getFoodIndex(x, y));
                 return;
             }

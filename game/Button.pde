@@ -39,6 +39,7 @@ class Button extends GUIElement {
     // Functionality
     void onMouseHover() {
         if (!mouseInsideRect(this.x, this.y, this.w, this.h)) {
+            this.beingPressed = false;
             this.bgColor = color(0);
             return;
         }
@@ -60,9 +61,20 @@ class Button extends GUIElement {
             return;
         }
         this.beingPressed = false;
-        println("Button lcicked");
         switch (btnText) {
             case "Play":
+                boolean tutorialNeeded = playerStats.tutorialNeeded();
+                if (scene == "enterName") {
+                    enterNameGUI.textField.submit();
+                    scene = "game";
+                    break;
+                } else if (scene == "tutorial") {
+                    scene = "game";
+                    break;
+                } else if (tutorialNeeded) {
+                    scene = "tutorial";
+                    break;
+                }
                 scene = "game";
                 break;
             case "Next":
@@ -72,7 +84,6 @@ class Button extends GUIElement {
                 scene = "highscores";
                 break;
             case "Back":
-                println("Pressed back");
                 scene = "mainMenu";
                 break;
         }

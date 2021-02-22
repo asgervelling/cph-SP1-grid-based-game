@@ -12,6 +12,7 @@ class Label extends GUIElement {
         this.font = createFont("arcade2020.ttf", fontSize);
         this.textY = getTextY();
         
+        super.padding = 16;
         super.margin = 20;
         
         super.registerLabel(this);
@@ -24,6 +25,7 @@ class Label extends GUIElement {
         this.fontSize = 32;
         this.font = createFont("arcade2020.ttf", fontSize);
         this.textY = getTextY();
+        super.padding = 16;
         super.margin = 20;
         
         super.registerLabel(this);
@@ -44,5 +46,10 @@ class Label extends GUIElement {
         textAlign(BASELINE, BASELINE);
         fill(255);
         text(this.labelText, this.x + super.padding, this.textY);
+    }
+    
+    void setFontSize(int size) {
+        this.fontSize = size;
+        this.font = createFont("arcade2020.ttf", fontSize);
     }
 }
