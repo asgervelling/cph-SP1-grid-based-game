@@ -26,7 +26,7 @@ PlayerStats playerStats;
 int numEnemies = 3;
 
 void setup() {
-    size(1280, 720);
+    size(1280, 759);
     resetGame();
 }
 
@@ -37,13 +37,14 @@ void resetGame() {
     enterNameGUI = initEnterNameGUI();
     tutorialGUI = initTutorialGUI();
     settingsGUI = initSettingsGUI();
-    newGame(numEnemies, 3);
     numEnemies = 3;
+    newGame(numEnemies, 3);
 }
 
 void draw() {    
-    // println("Scene: " + scene + ". Last scene: " + lastScene);
-    // println("Username and bool: " + playerStats.getUsernameFromConfig(), playerStats.tutorialNeeded());
+    noStroke();
+    fill(127);
+    rect(0, 720, width, 39);
     switch (scene) {
         case "mainMenu":
             drawBoard();
@@ -65,6 +66,7 @@ void draw() {
             update();
             drawBoard();
             drawParticles();
+            player.displayHUD();
             if (countdownTransition.timeLeft > 0) {
                 countdownTransition.display();
             }

@@ -22,9 +22,17 @@ class Player extends Actor {
     color secondaryColor = color(255);
 
     color c = primaryColor;
+    
+    // HUD
+    PImage heartFilledImage;
+    PImage heartEmptyImage;
+    PFont font;
 
     Player(int x, int y) {
         super(x, y);
+        this.heartFilledImage = loadImage(dataPath("heartFilled.png"));
+        this.heartEmptyImage = loadImage(dataPath("heartEmpty.png"));
+        this.font = createFont("arcade2020.ttf", 32);
     }
 
     @Override
@@ -193,5 +201,39 @@ class Player extends Actor {
         } else {
             this.c = primaryColor;
         }
+    }
+    
+    void displayHUD() {
+        this.displayHealth(546);
+        this.displayPoints(756);
+    }
+    
+    void displayHealth(int xOffset) {
+        int[] xLocations = {xOffset - 32, xOffset, xOffset + 32};
+        int yLocation = 722;
+        switch (playerStats.health) {
+            case 3:
+                image(this.heartFilledImage, xLocations[0], yLocation);
+                image(this.heartFilledImage, xLocations[1], yLocation);
+                image(this.heartFilledImage, xLocations[2], yLocation);
+                break;
+            case 2:
+                image(this.heartFilledImage, xLocations[0], yLocation);
+                image(this.heartFilledImage, xLocations[1], yLocation);
+                image(this.heartEmptyImage, xLocations[2], yLocation);
+                break;
+            case 1:
+                image(this.heartFilledImage, xLocations[0], yLocation);
+                image(this.heartEmptyImage, xLocations[1], yLocation);
+                image(this.heartEmptyImage, xLocations[2], yLocation);
+                break;
+        }
+    }
+    
+    void displayPoints(int xOffset) {
+        textAlign(TOP, TOP);
+        textSize(32);
+        fill(255);
+        text(playerStats.points, xOffset, 725);
     }
 }
