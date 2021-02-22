@@ -8,6 +8,7 @@ import java.io.FileWriter;
 
 
 String scene = "mainMenu";
+String lastScene = "mainMenu";
 int[][] grid = new int[80][45];
 final int tileSize = 16;
 
@@ -19,6 +20,7 @@ GraphicalUserInterface mainMenuGUI;
 GraphicalUserInterface highscoresGUI;
 GraphicalUserInterface enterNameGUI;
 GraphicalUserInterface tutorialGUI;
+GraphicalUserInterface settingsGUI;
 PlayerStats playerStats;
 
 int numEnemies = 3;
@@ -34,11 +36,13 @@ void resetGame() {
     highscoresGUI = initHighscoresGUI();
     enterNameGUI = initEnterNameGUI();
     tutorialGUI = initTutorialGUI();
+    settingsGUI = initSettingsGUI();
     newGame(numEnemies, 3);
     numEnemies = 3;
 }
 
 void draw() {    
+    // println("Scene: " + scene + ". Last scene: " + lastScene);
     // println("Username and bool: " + playerStats.getUsernameFromConfig(), playerStats.tutorialNeeded());
     switch (scene) {
         case "mainMenu":
@@ -47,9 +51,6 @@ void draw() {
             mainMenuGUI.display();
             break;
         case "tutorial":
-            println(tutorialGUI.buttons.get(0).beingPressed);
-            println(tutorialGUI.checkbox.beingPressed);
-            println();
             drawBoard();
             tutorialGUI.update();
             tutorialGUI.display();
@@ -73,7 +74,11 @@ void draw() {
             highscoresGUI.update();
             highscoresGUI.display();
             break;
-            
+        case "settings":
+            drawBoard();
+            settingsGUI.update();
+            settingsGUI.display();
+            break;            
     }
 }
 
@@ -162,6 +167,9 @@ void mousePressed() {
         case "enterName":
             enterNameGUI.handleMousePressed();
             break;
+        case "settings":
+            settingsGUI.handleMousePressed();
+            break;
     }
     
 }
@@ -179,6 +187,9 @@ void mouseReleased() {
             break;
         case "enterName":
             enterNameGUI.handleMouseReleased();
+            break;
+        case "settings":
+            settingsGUI.handleMouseReleased();
             break;
     }
 }
@@ -244,8 +255,10 @@ void resolveCollisions() {
     // Collision with food
     for (int i = 0; i < foods.size(); i++) {
         if (player.collidesWith(foods.get(i))) {
-            player.gainPoint();
-            foods.remove(i);
+            if (!player.isInvincible()) {
+                player.gainPoint();
+                foods.remove(i);
+            }
         }
     }
 }

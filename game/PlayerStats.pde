@@ -31,7 +31,6 @@ class PlayerStats {
     String getUsernameFromConfig() {
         try {
             Scanner s = new Scanner(new File(dataPath(configFile)));
-            int getUsername = 0;
             while (s.hasNext()) {
                 String[] parts = s.next().split(":");
                 String configVar = parts[0];
@@ -39,8 +38,6 @@ class PlayerStats {
                 if ((configVar.equals("username"))) {
                     return value;
                 }
-                println("getUsername: " + getUsername);
-                getUsername++;
             }
             s.close();
         } catch (IOException e) {

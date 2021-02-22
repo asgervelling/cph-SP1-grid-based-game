@@ -17,7 +17,6 @@ class HighscoreHandler {
 
         try {            
             // Add to ArrayLists
-            
             int index = 0;
             while (score <= this.sortedScores.get(index)) {
                 index++;
@@ -25,9 +24,7 @@ class HighscoreHandler {
             this.sortedNames.add(index, name);
             this.sortedScores.add(index, score);
             
-            
             // Add to text file
-            
             FileWriter writer = new FileWriter(dataPath(file));
             BufferedWriter buffer = new BufferedWriter(writer);
             for (int i = 0; i < this.sortedNames.size(); i++) {
@@ -37,7 +34,7 @@ class HighscoreHandler {
             buffer.close();
             writer.close();
             
-        } catch (Exception e) {
+        } catch (IOException e) {
             println("HighscoreHandler.addScore() failed");
             e.printStackTrace();
         }
@@ -55,10 +52,43 @@ class HighscoreHandler {
                 this.sortedNames.add(part0);
                 this.sortedScores.add(part1);
             }
+            s.close();
         } catch (IOException e) {
             e.printStackTrace();
             println("HighscoreHandler.loadHighscores() failed");
         }
     }
     
+    boolean highscoresEmpty() {
+        this.loadHighscores();
+        for (int i = 0; i < sortedNames.size(); i++) {
+            if (!(sortedNames.get(i) == "--") &&
+                !(sortedScores.get(i) == 0)) {
+                return false;    
+            } 
+        }
+        return true;
+    }
+    
+    void resetHighscores() {
+        this.sortedNames = new ArrayList<String>();
+        this.sortedScores = new ArrayList<Integer>();
+        
+        try {
+            Scanner s = new Scanner(new File(dataPath(file)));
+            // Add to text file
+            FileWriter writer = new FileWriter(dataPath(file));
+            BufferedWriter buffer = new BufferedWriter(writer);
+            for (int i = 0; i < 5; i++) {
+                writer.write("--:0;\n");
+            }
+            
+            buffer.close();
+            writer.close();
+            s.close();
+        } catch (IOException e) {
+            println("IOException at HighscoreHandler.resetHighscores()");
+            e.printStackTrace();
+        }
+    }
 }

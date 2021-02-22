@@ -55,3 +55,8 @@ boolean mouseInsideRect(int x, int y, int w, int h) {
         }
     return false;
 }
+
+void goToScene(String s) {
+    lastScene = scene;
+    scene = s;    
+}

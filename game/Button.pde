@@ -24,9 +24,9 @@ class Button extends GUIElement {
     
     @Override
     void display() {
-        fill(super.bgColor);
-        stroke(super.strokeColor);
         strokeWeight(5);
+        stroke(super.strokeColor);
+        fill(this.bgColor);
         rect(super.x, super.y, super.w, super.h, 50, 0, 50, 0);
         
         textSize(this.fontSize);
@@ -34,6 +34,11 @@ class Button extends GUIElement {
         textAlign(BASELINE, BASELINE);
         fill(255);
         text(this.btnText, this.x + super.padding, this.textY);
+    }
+    
+    void setFontSize(int size) {
+        this.fontSize = size;
+        this.font = createFont("arcade2020.ttf", fontSize);
     }
     
     // Functionality
@@ -66,25 +71,35 @@ class Button extends GUIElement {
                 boolean tutorialNeeded = playerStats.tutorialNeeded();
                 if (scene == "enterName") {
                     enterNameGUI.textField.submit();
-                    scene = "game";
+                    goToScene("game");
                     break;
                 } else if (scene == "tutorial") {
-                    scene = "game";
+                    goToScene("game");
                     break;
                 } else if (tutorialNeeded) {
-                    scene = "tutorial";
+                    goToScene("tutorial");
                     break;
                 }
                 scene = "game";
                 break;
             case "Next":
-                scene = "enterName";
+                goToScene("enterName");
                 break;
             case "Highscores":
-                scene = "highscores";
+                goToScene("highscores");
                 break;
             case "Back":
-                scene = "mainMenu";
+                goToScene(lastScene);
+                break;
+            case "Settings":
+                goToScene("settings");
+                break;
+            case "Reset highscores":
+                HighscoreHandler hh = new HighscoreHandler();
+                hh.resetHighscores();
+                break;
+            case "Change name":
+                goToScene("enterName");
                 break;
         }
     }

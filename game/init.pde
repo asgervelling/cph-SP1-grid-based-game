@@ -38,7 +38,6 @@ GraphicalUserInterface initMainMenuGUI() {
 GraphicalUserInterface initTutorialGUI() {
     GraphicalUserInterface GUI = new GraphicalUserInterface();
     String username = playerStats.getUsernameFromConfig();
-    boolean tutorialNeeded = playerStats.tutorialNeeded();
     
     Container masterContainer = new Container(100, 100, 1080, 520, GUI);
     Label titleLabel = new Label(410, 130, "Tutorial", GUI);
@@ -50,6 +49,11 @@ GraphicalUserInterface initTutorialGUI() {
     if (username.equals("none")) {
         button.btnText = "Next";
     }
+    button.w = 190;
+    
+    Button backButton = new Button(620, placedBelow(tutorialLabel), "Back", GUI);
+    backButton.w = 190;
+    
     int labelY = placedBelow(button) - 8;
     Checkbox checkbox = new Checkbox(410, labelY, "doNotShowAgain", GUI); 
     int labelX = checkbox.x + checkbox.w + checkbox.margin;
@@ -95,5 +99,20 @@ GraphicalUserInterface initHighscoresGUI() {
     }
     
     Button backButton = new Button(410, placedBelow(previousScoreLabel), "Back", GUI);
+    return GUI;
+}
+
+GraphicalUserInterface initSettingsGUI() {
+    GraphicalUserInterface GUI = new GraphicalUserInterface();
+    Container masterContainer = new Container(100, 100, 1080, 520, GUI);
+    Label titleLabel = new Label(410, 130, "Settings", GUI);
+    
+    Button resetHighscoresButton = new Button(410, placedBelow(titleLabel), "Reset highscores", GUI);
+    resetHighscoresButton.setFontSize(34);
+    
+    Button changeNameButton = new Button(410, placedBelow(resetHighscoresButton), "Change name", GUI);
+    
+    Button backButton = new Button(410, placedBelow(changeNameButton), "Back", GUI);
+    
     return GUI;
 }

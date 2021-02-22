@@ -38,8 +38,6 @@ class Player extends Actor {
         } else {
             this.c = primaryColor;
         }
-        
-        println(playerStats.health);
     }
     
     @Override
@@ -128,9 +126,7 @@ class Player extends Actor {
     }
     
     void gainPoint() {
-        if (!player.isInvincible()) {
-            playerStats.points++;
-        }
+        playerStats.points++;
     }
     
     void tryBodyExpansion(int x, int y) {
@@ -143,9 +139,11 @@ class Player extends Actor {
         for (int i = 0; i < foods.size(); i++) {
             if (foods.get(i).x == x && foods.get(i).y == y) {
                 // There is food here
-                this.gainPoint();
-                foods.remove(getFoodIndex(x, y));
-                return;
+                if (!player.isInvincible()) {
+                    this.gainPoint();
+                    foods.remove(getFoodIndex(x, y));
+                    return;
+                }
             }
         }
         grid[x][y] = arrayRepresentation;
