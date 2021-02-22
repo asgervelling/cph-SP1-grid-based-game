@@ -1,9 +1,7 @@
 class Container extends GUIElement {
-    String name;
     
-    Container(int x, int y, int w, int h, String name, GraphicalUserInterface GUI) {
+    Container(int x, int y, int w, int h, GraphicalUserInterface GUI) {
         super(x, y, w, h, GUI);
-        this.name = name;
     }
     
     @Override

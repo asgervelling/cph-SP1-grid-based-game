@@ -1,13 +1,11 @@
 class Label extends GUIElement {
-    Container parentContainer;
     String labelText;
     int fontSize;
     PFont font;
     int textY;
     
-    Label(int x, int y, String labelText, Container parentContainer, GraphicalUserInterface GUI) {
+    Label(int x, int y, String labelText, GraphicalUserInterface GUI) {
         super(x, y, 400, 48, GUI);
-        this.parentContainer = parentContainer;
         this.labelText = labelText;
         
         this.fontSize = 32;
@@ -19,9 +17,8 @@ class Label extends GUIElement {
         super.registerLabel(this);
     }
     
-    Label(int x, int y, int w, String labelText, Container parentContainer, GraphicalUserInterface GUI) {
+    Label(int x, int y, int w, String labelText, GraphicalUserInterface GUI) {
         super(x, y, w, 48, GUI);
-        this.parentContainer = parentContainer;
         this.labelText = labelText;
         
         this.fontSize = 32;

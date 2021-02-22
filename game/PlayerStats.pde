@@ -13,6 +13,7 @@ class PlayerStats {
         try {
             Scanner s = new Scanner(new File(dataPath(configFile)));
             while (s.hasNext()) {
+                println("tutorialNeeded()");
                 String[] parts = s.next().split(":");
                 String configVar = parts[0];
                 boolean value = Boolean.parseBoolean(parts[1].substring(0, parts[1].length() - 1));
@@ -31,14 +32,16 @@ class PlayerStats {
     String getUsernameFromConfig(String configFile) {
         try {
             Scanner s = new Scanner(new File(dataPath(configFile)));
+            int getUsername = 0;
             while (s.hasNext()) {
                 String[] parts = s.next().split(":");
                 String configVar = parts[0];
                 String value = parts[1].substring(0, parts[1].length() - 1);
-                if ((configVar.contains("username"))) {
-                    this.username = value;
+                if ((configVar.equals("username"))) {
                     return value;
                 }
+                println("getUsername: " + getUsername);
+                getUsername++;
             }
             s.close();
         } catch (IOException e) {

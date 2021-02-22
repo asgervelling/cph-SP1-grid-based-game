@@ -1,5 +1,4 @@
 class Button extends GUIElement {
-    Container parentContainer;
     boolean beingPressed;
     
     PFont font;
@@ -7,9 +6,8 @@ class Button extends GUIElement {
     String btnText;
     int textY;
     
-    Button(int x, int y, String btnText, Container parentContainer, GraphicalUserInterface GUI) {
+    Button(int x, int y, String btnText, GraphicalUserInterface GUI) {
         super(x, y, 400, 100, GUI);
-        this.parentContainer = parentContainer;
         this.btnText = btnText;
         this.beingPressed = false;
         this.fontSize = autoScaleFontSize();
@@ -66,6 +64,9 @@ class Button extends GUIElement {
         switch (btnText) {
             case "Play":
                 scene = "game";
+                break;
+            case "Next":
+                scene = "enterName";
                 break;
             case "Highscores":
                 scene = "highscores";
